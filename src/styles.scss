@@ -1,0 +1,23 @@
+/* FitLab Canonical Design Tokens for Remote MFE */
+@import '@fitlab/tooling/styles/tokens.css';
+
+/* FitLab Global Reset & Base Typography */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: var(--fitlab-font-family);
+  color: var(--fitlab-text-primary);
+  background-color: var(--fitlab-bg-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
