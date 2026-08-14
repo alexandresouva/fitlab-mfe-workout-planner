@@ -7,7 +7,7 @@ module.exports = withNativeFederation({
   name: 'mfe-workout-planner',
 
   exposes: {
-    './Component': './src/app/app.component.ts'
+    './routes': './src/app/app.routes.ts'
   },
 
   shared: {
