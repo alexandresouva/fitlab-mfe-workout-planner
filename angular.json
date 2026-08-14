@@ -16,14 +16,15 @@
       "architect": {
         "build": {
           "builder": "@angular-architects/native-federation:build",
-          "options": {},
+          "options": {
+            "target": "fitlab-mfe-workout-planner:esbuild:production"
+          },
           "configurations": {
             "production": {
               "target": "fitlab-mfe-workout-planner:esbuild:production"
             },
             "development": {
-              "target": "fitlab-mfe-workout-planner:esbuild:development",
-              "dev": true
+              "target": "fitlab-mfe-workout-planner:esbuild:development"
             }
           },
           "defaultConfiguration": "production"
@@ -65,6 +66,7 @@
             "browser": "src/main.ts",
             "polyfills": ["zone.js", "es-module-shims"],
             "tsConfig": "tsconfig.app.json",
+            "preserveSymlinks": true,
             "inlineStyleLanguage": "scss",
             "assets": [
               {
@@ -85,11 +87,11 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "6kB",
+                  "maximumError": "10kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "none"
             },
             "development": {
               "optimization": false,
