@@ -1,25 +1,16 @@
-.workout-remote-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  font-family: var(--fitlab-font-family);
-  color: var(--fitlab-text-primary);
-  background-color: var(--fitlab-bg-surface);
-  min-height: 100%;
+.standalone-warning-banner {
+  background-color: #fef3c7;
+  border-bottom: 1px solid #f59e0b;
+  color: #b45309;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 
-  .workout-remote-header {
-    h1 {
-      margin: 0 0 0.25rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--fitlab-text-primary);
-    }
-
-    p {
-      margin: 0;
-      font-size: 0.875rem;
-      color: var(--fitlab-text-secondary);
-    }
+  span {
+    display: inline-block;
   }
 }
