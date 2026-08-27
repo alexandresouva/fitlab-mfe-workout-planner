@@ -5,21 +5,28 @@
     inteligente.
   </p>
 
-  <div class="workout-card">
-    <h3>🏋️ Treino de Força (Hipertrofia A)</h3>
-    <div class="exercises">
-      <div class="exercise-item">
-        <span>Supino Reto (Barra)</span>
-        <span class="badge">4 x 10</span>
-      </div>
-      <div class="exercise-item">
-        <span>Agachamento Livre</span>
-        <span class="badge">4 x 8</span>
-      </div>
-      <div class="exercise-item">
-        <span>Puxada Alta (Cabo)</span>
-        <span class="badge">3 x 12</span>
+  @if (workoutId()) {
+    <div class="workout-card edit-mode">
+      <h3>📝 Editando Treino ID: {{ workoutId() }}</h3>
+      <p>Visualização e edição do treino carregadas a partir da URL.</p>
+    </div>
+  } @else {
+    <div class="workout-card">
+      <h3>🏋️ Treino de Força (Hipertrofia A)</h3>
+      <div class="exercises">
+        <div class="exercise-item">
+          <span>Supino Reto (Barra)</span>
+          <span class="badge">4 x 10</span>
+        </div>
+        <div class="exercise-item">
+          <span>Agachamento Livre</span>
+          <span class="badge">4 x 8</span>
+        </div>
+        <div class="exercise-item">
+          <span>Puxada Alta (Cabo)</span>
+          <span class="badge">3 x 12</span>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>
