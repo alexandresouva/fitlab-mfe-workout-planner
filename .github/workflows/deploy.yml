@@ -14,26 +14,49 @@ jobs:
     name: Validate and Test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout Workout Planner Code
         uses: actions/checkout@v4
+        with:
+          path: fitlab-mfe-workout-planner
+
+      - name: Checkout Tooling Code
+        uses: actions/checkout@v4
+        with:
+          repository: alexandresouva/fitlab-lib-tooling
+          path: fitlab-lib-tooling
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
+          cache-dependency-path: fitlab-mfe-workout-planner/package-lock.json
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Install and Build Tooling
+        run: |
+          cd fitlab-lib-tooling
+          npm ci
+          npm run build
+
+      - name: Install Workout Planner Dependencies
+        run: |
+          cd fitlab-mfe-workout-planner
+          npm ci
 
       - name: Lint Code
-        run: npm run lint
+        run: |
+          cd fitlab-mfe-workout-planner
+          npm run lint
 
       - name: Run Tests
-        run: npm run test:ci
+        run: |
+          cd fitlab-mfe-workout-planner
+          npm run test:ci
 
       - name: Build Application
-        run: npm run build
+        run: |
+          cd fitlab-mfe-workout-planner
+          npm run build
 
   deploy:
     name: Deploy to AWS S3 / CloudFront
@@ -45,23 +68,42 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: us-east-1
     steps:
-      - name: Checkout Code
+      - name: Checkout Workout Planner Code
         uses: actions/checkout@v4
+        with:
+          path: fitlab-mfe-workout-planner
+
+      - name: Checkout Tooling Code
+        uses: actions/checkout@v4
+        with:
+          repository: alexandresouva/fitlab-lib-tooling
+          path: fitlab-lib-tooling
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
+          cache-dependency-path: fitlab-mfe-workout-planner/package-lock.json
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Install and Build Tooling
+        run: |
+          cd fitlab-lib-tooling
+          npm ci
+          npm run build
+
+      - name: Install Workout Planner Dependencies
+        run: |
+          cd fitlab-mfe-workout-planner
+          npm ci
 
       - name: Build Application
-        run: npm run build
+        run: |
+          cd fitlab-mfe-workout-planner
+          npm run build
 
       - name: Sync to S3
-        run: aws s3 sync dist/fitlab-mfe-workout-planner/browser/ s3://fitlab-dev-mfe-assets/workouts/ --delete
+        run: aws s3 sync fitlab-mfe-workout-planner/dist/fitlab-mfe-workout-planner/browser/ s3://fitlab-dev-mfe-assets/workouts/ --delete
 
       - name: Invalidate CloudFront Cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID }} --paths "/workouts/*"
