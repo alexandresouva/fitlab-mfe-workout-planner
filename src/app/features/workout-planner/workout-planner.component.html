@@ -1,32 +1,202 @@
 <div class="workout-planner-container">
-  <h1>Planejador de Treinos</h1>
-  <p>
-    Monitore, estruture e evolua suas rotinas de exercícios de forma
-    inteligente.
-  </p>
-
-  @if (workoutId()) {
-    <div class="workout-card edit-mode">
-      <h3>📝 Editando Treino ID: {{ workoutId() }}</h3>
-      <p>Visualização e edição do treino carregadas a partir da URL.</p>
+  <!-- LIST MODE: If no workout is selected -->
+  @if (!store.activeWorkout()) {
+    <div class="header-section">
+      <h1>Planejador de Treinos</h1>
+      <p class="subtitle">
+        Monitore, estruture e evolua suas rotinas de exercícios de forma
+        inteligente.
+      </p>
     </div>
-  } @else {
-    <div class="workout-card">
-      <h3>🏋️ Treino de Força (Hipertrofia A)</h3>
-      <div class="exercises">
-        <div class="exercise-item">
-          <span>Supino Reto (Barra)</span>
-          <span class="badge">4 x 10</span>
-        </div>
-        <div class="exercise-item">
-          <span>Agachamento Livre</span>
-          <span class="badge">4 x 8</span>
-        </div>
-        <div class="exercise-item">
-          <span>Puxada Alta (Cabo)</span>
-          <span class="badge">3 x 12</span>
-        </div>
+
+    <div class="workouts-grid">
+      @for (workout of store.workouts(); track workout.id) {
+        <fitlab-card
+          (click)="onSelectWorkout(workout.id)"
+          class="clickable-card"
+        >
+          <fitlab-card-content>
+            <h3>{{ workout.name }}</h3>
+            <p>{{ workout.description }}</p>
+          </fitlab-card-content>
+          <fitlab-card-footer>
+            <fitlab-badge
+              >{{ workout.exercises.length }} Exercícios</fitlab-badge
+            >
+            <fitlab-button variant="outline" class="start-btn"
+              >Iniciar</fitlab-button
+            >
+          </fitlab-card-footer>
+        </fitlab-card>
+      }
+    </div>
+  }
+
+  <!-- DETAILS & EXECUTION MODE: If a workout is selected -->
+  @else {
+    @let active = store.activeWorkout()!;
+    @let progress = store.workoutProgress();
+
+    <div class="active-header">
+      <fitlab-button variant="secondary" (click)="onGoBack()" class="back-btn">
+        &larr; Voltar
+      </fitlab-button>
+      <div class="title-area">
+        <h2>{{ active.name }}</h2>
+        <p>{{ active.description }}</p>
       </div>
+    </div>
+
+    <!-- Progress Tracker -->
+    <div class="progress-tracker">
+      <div class="progress-info">
+        <span>Progresso do Treino</span>
+        <span class="progress-stats">
+          {{ progress.completedSets }} de {{ progress.totalSets }} séries
+          <fitlab-badge>{{ progress.percentage }}%</fitlab-badge>
+        </span>
+      </div>
+      <div class="progress-bar-container">
+        <div
+          class="progress-bar-fill"
+          [style.width.%]="progress.percentage"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Exercises List -->
+    <div class="exercises-section">
+      <h3>Exercícios da Rotina</h3>
+
+      @if (active.exercises.length === 0) {
+        <div class="empty-state">
+          <p>Nenhum exercício cadastrado. Adicione um abaixo!</p>
+        </div>
+      }
+
+      <div class="exercises-list">
+        @for (exercise of active.exercises; track exercise.id) {
+          <div class="exercise-card">
+            <div class="exercise-header">
+              <div class="exercise-info">
+                <h4>{{ exercise.name }}</h4>
+                <span class="rest-time-label"
+                  >Descanso: {{ exercise.restTimeSeconds }}s</span
+                >
+              </div>
+              <fitlab-button
+                variant="outline"
+                (click)="onRemoveExercise(exercise.id)"
+                class="remove-btn"
+              >
+                Excluir
+              </fitlab-button>
+            </div>
+
+            <!-- Interactive Sets Checkoff -->
+            <div class="sets-grid">
+              @for (set of exercise.sets; track set.id) {
+                <button
+                  type="button"
+                  [class.completed]="set.completed"
+                  class="set-button"
+                  (click)="onToggleSet(exercise.id, set)"
+                >
+                  <span class="set-number">Série {{ set.setNumber }}</span>
+                  <span class="set-details"
+                    >{{ set.weight }}kg &times; {{ set.reps }}</span
+                  >
+                  <span class="set-check">✔</span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Customization: Add Exercise Form -->
+    <div class="add-exercise-form">
+      <h3>Adicionar Exercício ao Treino</h3>
+      <form
+        (submit)="$event.preventDefault(); onAddExercise()"
+        class="form-grid"
+      >
+        <div class="form-group full-width">
+          <label for="name">Nome do Exercício</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [ngModel]="newExerciseName()"
+            (ngModelChange)="newExerciseName.set($event)"
+            placeholder="Ex: Supino Reto, Leg Press..."
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="sets">Séries</label>
+          <input
+            type="number"
+            id="sets"
+            name="sets"
+            [ngModel]="newExerciseSets()"
+            (ngModelChange)="newExerciseSets.set($event)"
+            min="1"
+            max="10"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="reps">Repetições</label>
+          <input
+            type="number"
+            id="reps"
+            name="reps"
+            [ngModel]="newExerciseReps()"
+            (ngModelChange)="newExerciseReps.set($event)"
+            min="1"
+            max="100"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="weight">Carga (kg)</label>
+          <input
+            type="number"
+            id="weight"
+            name="weight"
+            [ngModel]="newExerciseWeight()"
+            (ngModelChange)="newExerciseWeight.set($event)"
+            min="0"
+            max="500"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="rest">Descanso (s)</label>
+          <input
+            type="number"
+            id="rest"
+            name="rest"
+            [ngModel]="newExerciseRest()"
+            (ngModelChange)="newExerciseRest.set($event)"
+            min="10"
+            max="300"
+            required
+          />
+        </div>
+
+        <div class="form-actions full-width">
+          <fitlab-button variant="primary" type="submit" class="submit-btn">
+            + Adicionar Exercício
+          </fitlab-button>
+        </div>
+      </form>
     </div>
   }
 </div>

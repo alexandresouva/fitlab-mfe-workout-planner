@@ -1,65 +1,340 @@
 .workout-planner-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  font-family: var(--fitlab-font-family, sans-serif);
+  color: var(--fitlab-text-primary, #0f172a);
+}
+
+.header-section {
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.025em;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--fitlab-text-secondary, #64748b);
+    margin: 0;
+  }
+}
+
+.workouts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.clickable-card {
+  cursor: pointer;
+
+  h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+  }
+
+  fitlab-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    width: 100%;
+  }
+}
+
+.active-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  .back-btn {
+    margin-top: 0.25rem;
+  }
+
+  .title-area {
+    h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 0 0 0.25rem 0;
+    }
+    p {
+      color: var(--fitlab-text-secondary, #64748b);
+      margin: 0;
+      font-size: 1.05rem;
+    }
+  }
+}
+
+.progress-tracker {
+  background-color: var(--fitlab-bg-surface, #ffffff);
+  border: 1px solid var(--fitlab-border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+
+    .progress-stats {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+  }
+
+  .progress-bar-container {
+    background-color: var(--fitlab-bg-hover, #f1f5f9);
+    height: 8px;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    background-color: var(--fitlab-primary, #0284c7);
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+.exercises-section {
+  margin-bottom: 2.5rem;
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  background-color: var(--fitlab-bg-surface, #ffffff);
+  border: 2px dashed var(--fitlab-border-color, #e2e8f0);
+  border-radius: 12px;
+  color: var(--fitlab-text-secondary, #64748b);
+}
+
+.exercises-list {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding: 1.5rem;
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
-  color: var(--fitlab-text-primary);
+}
 
-  h1 {
-    margin: 0;
-    font-size: 1.75rem;
+.exercise-card {
+  background-color: var(--fitlab-bg-surface, #ffffff);
+  border: 1px solid var(--fitlab-border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 1.5rem;
+
+  .exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--fitlab-border-color, #f1f5f9);
+    padding-bottom: 0.75rem;
+
+    h4 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0 0 0.25rem 0;
+    }
+
+    .rest-time-label {
+      font-size: 0.85rem;
+      color: var(--fitlab-text-secondary, #64748b);
+      background-color: var(--fitlab-bg-hover, #f1f5f9);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+  }
+}
+
+.sets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.set-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background-color: var(--fitlab-bg-surface, #ffffff);
+  border: 1.5px solid var(--fitlab-border-color, #e2e8f0);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  outline: none;
+
+  .set-number {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--fitlab-text-secondary, #64748b);
+    margin-bottom: 0.25rem;
+  }
+
+  .set-details {
+    font-size: 1.05rem;
     font-weight: 700;
   }
 
-  p {
-    margin: 0;
-    font-size: 0.875rem;
-    color: var(--fitlab-text-secondary);
+  .set-check {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #22c55e;
+    color: white;
+    font-size: 0.65rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  .workout-card {
-    background-color: var(--fitlab-bg-secondary);
-    border: 1px solid var(--fitlab-border-color);
+  &:hover {
+    border-color: var(--fitlab-primary, #0284c7);
+    background-color: var(--fitlab-bg-hover, #f8fafc);
+  }
+
+  &.completed {
+    border-color: #22c55e;
+    background-color: #f0fdf4;
+    color: #15803d;
+
+    .set-number {
+      color: #16a34a;
+    }
+
+    .set-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+.add-exercise-form {
+  background-color: var(--fitlab-bg-surface, #ffffff);
+  border: 1px solid var(--fitlab-border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 3rem;
+
+  h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+  }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--fitlab-text-secondary, #64748b);
+  }
+
+  input {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.6rem 0.8rem;
+    border: 1.5px solid var(--fitlab-border-color, #e2e8f0);
     border-radius: 8px;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    background-color: var(--fitlab-bg-surface, #ffffff);
+    color: inherit;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
 
-    h3 {
-      margin: 0;
-      font-size: 1.125rem;
-      font-weight: 600;
+    &:focus {
+      border-color: var(--fitlab-primary, #0284c7);
     }
+  }
+}
 
-    .exercises {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
 
-    .exercise-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem;
-      background-color: var(--fitlab-bg-primary);
-      border: 1px solid var(--fitlab-border-color);
-      border-radius: 6px;
-      font-size: 0.875rem;
+// Dark Mode adaptations
+:host-context(html.dark) {
+  color: var(--fitlab-text-primary, #f8fafc);
 
-      .badge {
-        background-color: var(--fitlab-color-primary, #6366f1);
-        color: white;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.75rem;
-        font-weight: 600;
+  .active-header .title-area p,
+  .header-section .subtitle {
+    color: var(--fitlab-text-secondary, #94a3b8);
+  }
+
+  .exercise-card {
+    .exercise-header {
+      border-bottom-color: var(--fitlab-border-color, #1e293b);
+      .rest-time-label {
+        background-color: var(--fitlab-bg-hover, #1e293b);
+        color: var(--fitlab-text-secondary, #94a3b8);
       }
     }
+  }
+
+  .set-button {
+    background-color: var(--fitlab-bg-surface, #111827);
+
+    .set-number {
+      color: var(--fitlab-text-secondary, #94a3b8);
+    }
+
+    &:hover {
+      background-color: var(--fitlab-bg-hover, #1e293b);
+      border-color: var(--fitlab-primary, #38bdf8);
+    }
+
+    &.completed {
+      border-color: #22c55e;
+      background-color: rgba(34, 197, 94, 0.1);
+      color: #4ade80;
+
+      .set-number {
+        color: #22c55e;
+      }
+    }
+  }
+
+  .progress-tracker .progress-bar-container {
+    background-color: var(--fitlab-bg-hover, #1e293b);
   }
 }
